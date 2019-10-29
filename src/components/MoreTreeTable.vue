@@ -1,25 +1,25 @@
 <template>
   <div class="editTableWrapper" ref="editTableWrapper" @wheel="wheel">
     <!-- 固定列头表格 西南方向 左下角部分-->
-    <edit-col-head
+    <col-head
       v-if="colHead.length > 0"
       class="fix south__west"
       :onlyFix="true"
       :allRow="true"
       @popoverChange="popoverChange3"
       :style="southWestStyle"
-    ></edit-col-head>
+    ></col-head>
     <!-- 固定列头部表格 西北方向 左上角部分 -->
-    <edit-col-head
+    <col-head
       v-if="colHead.length > 0"
       class="fix north__west"
       :onlyFix="true"
       :allRow="false"
       @popoverChange="popoverChange3"
       :style="northWestStyle"
-    ></edit-col-head>
+    ></col-head>
     <!-- 固定表头表格 东北方向 主体表头 右上角-->
-    <edit-row-head
+    <row-head
       v-if="headers.length > 0"
       :headers="headers"
       class="fix north__east"
@@ -27,9 +27,9 @@
       :style="northEastStyle"
       @popoverChange="popoverChange2"
       :isEdit="isEdit"
-    ></edit-row-head>
+    ></row-head>
     <div :style="allTable">
-      <edit-row-head
+      <row-head
         v-if="headers.length > 0"
         :headers="headers"
         class="fix north__east"
@@ -37,7 +37,7 @@
         :style="northEastStyle1"
         @popoverChange="popoverChange2"
         :isEdit="isEdit"
-      ></edit-row-head>
+      ></row-head>
       <!-- 表体数值部分   右下角 -->
       <value-table
         v-if="colHead.length > 0 && (list1.length > 0 || list2.length > 0)"
@@ -61,11 +61,11 @@
 </template>
 <script>
 import "@/common/icon/icon-plus.svg";
-import EditColHead from "./EditColHead.vue";
+import ColHead from "./ColHead.vue";
 import ScrollBar from "@/common/component/ScrollBar.vue";
-import EditRowHead from "./EditRowHead.vue";
+import RowHead from "./RowHead.vue";
 import ValueTable from "./ValueTable.vue";
-import scrollable from "@/common/mixins/scrollable.js";
+import scrollable from "./scrollable.js";
 
 const getAllColumns = columns => {
   const result = [];
@@ -203,7 +203,7 @@ const headersToRows = originColumns => {
 export default {
   name: "EditTable",
   mixins: [scrollable],
-  components: { EditRowHead, EditColHead, ValueTable, ScrollBar },
+  components: { RowHead, ColHead, ValueTable, ScrollBar },
   data() {
     return {
       list1: [],
@@ -213,13 +213,10 @@ export default {
       data: [],
       //初始化数据
       initTable: [],
-      headColWidth: 80,
-
       scrollX: 0,
       scrollY: 0,
       clientWidth: 0,
       clientHeight: 0,
-      tableTdHeight: 40,
       tdHeight: [],
 
       tableClientX: 0,
@@ -551,13 +548,8 @@ export default {
     }
   },
   props: {
-    //     :leftNav="leftNav"
-    // :getData="getData"
     leftNav: Object,
     getData: Object,
-    initList1: Array,
-    initList2: Array,
-    initList3: Array,
     isEdit: {
       type: Boolean,
       default: true
@@ -565,19 +557,13 @@ export default {
     listFirst: Array,
     listSecond: Array,
     listThree: Array,
-    editType: {
-      type: String,
-      default: "input"
-    },
-    valueData: {
-      type: Array,
-      default() {
-        return [];
-      }
-    },
-    rowHeight: {
+    tableTdHeight: {
       type: Number,
       default: 40
+    },
+    headColWidth: {
+        type: Number,
+        default: 80
     },
     isHasData: {
       type: Number,

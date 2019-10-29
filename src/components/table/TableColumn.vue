@@ -20,7 +20,7 @@
           <div>
             1111
           </div>
-          <span v-else>--</span>
+          <!-- <span v-else>--</span> -->
         </template>
       </el-table-column>
     </template>
