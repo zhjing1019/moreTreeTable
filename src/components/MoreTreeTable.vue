@@ -60,9 +60,8 @@
   </div>
 </template>
 <script>
-import "@/common/icon/icon-plus.svg";
 import ColHead from "./ColHead.vue";
-import ScrollBar from "@/common/component/ScrollBar.vue";
+import ScrollBar from "./ScrollBar.vue";
 import RowHead from "./RowHead.vue";
 import ValueTable from "./ValueTable.vue";
 import scrollable from "./scrollable.js";
@@ -548,7 +547,8 @@ export default {
     }
   },
   props: {
-    leftNav: Object,
+    colHead: Array,
+    rowHead: Array,
     getData: Object,
     isEdit: {
       type: Boolean,
@@ -565,23 +565,7 @@ export default {
         type: Number,
         default: 80
     },
-    isHasData: {
-      type: Number,
-      default: 0
-    },
-    colHead: {
-      type: Array,
-      required: true
-    },
 
-    tableHeaderHeight: {
-      type: Number,
-      default: 40
-    },
-    editTable: {
-      type: Object,
-      required: true
-    }
   },
   watch: {
     // getData(val) {

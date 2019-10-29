@@ -1,4 +1,4 @@
-import { addResizeListener, removeResizeListener } from "element-ui/lib/utils/resize-event";
+import { addResizeListener, removeResizeListener } from "./common/resize-event";
 
 export default {
   data() {
