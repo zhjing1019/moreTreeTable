@@ -1,10 +1,12 @@
 'use strict';
 
+/*element监听和移除事件*/
 exports.__esModule = true;
 exports.removeResizeListener = exports.addResizeListener = undefined;
 
 var _resizeObserverPolyfill = require('resize-observer-polyfill');
 
+//使用resize-observer-polyfill
 var _resizeObserverPolyfill2 = _interopRequireDefault(_resizeObserverPolyfill);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
