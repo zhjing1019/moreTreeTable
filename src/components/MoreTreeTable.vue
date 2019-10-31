@@ -10,14 +10,14 @@
       :style="southWestStyle"
     ></col-head>
     <!-- 固定列头部表格 西北方向 左上角部分 -->
-    <col-head
+    <!-- <col-head
       v-if="colHead.length > 0"
       class="fix north__west"
       :onlyFix="true"
       :allRow="false"
       @popoverChange="popoverChange3"
       :style="northWestStyle"
-    ></col-head>
+    ></col-head> -->
     <!-- 固定表头表格 东北方向 主体表头 右上角-->
     <row-head
       v-if="headers.length > 0"
@@ -325,16 +325,9 @@ export default {
       }
       return height;
     },
-    //reset 纵向表头的数据
-
-    colHeaderData() {
-      let grageHead = this.headGrage(this.colHead);
-      let newArr = grageHead.slice(1);
-      return newArr;
-    },
     //纵向表头tr 和td的数据
     resetCol() {
-      return convertToRows(this.colHeaderData);
+      return convertToRows(this.colHead);
     },
     resetNewColHead() {
       let colRowData = this.resetCol;

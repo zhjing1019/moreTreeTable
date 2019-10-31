@@ -30,16 +30,25 @@ export default {
         let [tr] = [[]];
         //左上角部分
         this.headTotal = this.edit.allHeadRow.length;
+        // this.edit.allColHeadRow.forEach( (x, index) => {
+        //     if(index == 0) {
+        //         for(let i = 0; i < this.edit.allHeadRow.length; i++) {
+        //             let cell = [];
+        //             if(i === 0) {
+        //                 x.forEach((y) => {
+        //                     cell.push(this.creatFirstHeadTr(h, y, i));
+        //                 })
+        //             }
+        //             tr.push(<tr>{cell}</tr>)
+        //         }
+        //     }
+        // })
+        let rowSpan = this.edit.allHeadRow.length;
+        let colSpan = this.edit.allColHeadRow.length;
         this.edit.allColHeadRow.forEach( (x, index) => {
             if(index == 0) {
                 for(let i = 0; i < this.edit.allHeadRow.length; i++) {
-                    let cell = [];
-                    if(i === 0) {
-                        x.forEach((y) => {
-
-                            cell.push(this.creatFirstHeadTr(h, y, i));
-                        })
-                    }
+                    let cell = (<th colspan={colSpan} rowSpan={rowSpan}></th>)
                     tr.push(<tr>{cell}</tr>)
                 }
             }
