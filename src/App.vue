@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <more-tree-table :colHead="colHead" :rowHead="rowHead"></more-tree-table>
+  <div class="more-app">
+    <more-tree-table :colData="colHead" :rowData="rowHead"></more-tree-table>
   </div>
 </template>
 
@@ -24,7 +24,9 @@ export default {
 </script>
 
 <style>
-#app {
-
+.more-app{
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
 }
 </style>

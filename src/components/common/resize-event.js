@@ -1,23 +1,14 @@
-'use strict';
-
-/*element监听和移除事件*/
-exports.__esModule = true;
-exports.removeResizeListener = exports.addResizeListener = undefined;
-
+'use strict'
 var _resizeObserverPolyfill = require('resize-observer-polyfill');
-
-//使用resize-observer-polyfill
 var _resizeObserverPolyfill2 = _interopRequireDefault(_resizeObserverPolyfill);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var isServer = typeof window === 'undefined';
 
-/* istanbul ignore next */
 var resizeHandler = function resizeHandler(entries) {
-  for (var _iterator = entries, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+  var _iterator = entries, _isArray = Array.isArray(_iterator);
+  _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();
+  for(var _i = 0; _i < entries.length;) {
     var _ref;
-
     if (_isArray) {
       if (_i >= _iterator.length) break;
       _ref = _iterator[_i++];
@@ -37,23 +28,33 @@ var resizeHandler = function resizeHandler(entries) {
     }
   }
 };
-
-/* istanbul ignore next */
-var addResizeListener = exports.addResizeListener = function addResizeListener(element, fn) {
-  if (isServer) return;
-  if (!element.__resizeListeners__) {
-    element.__resizeListeners__ = [];
-    element.__ro__ = new _resizeObserverPolyfill2.default(resizeHandler);
-    element.__ro__.observe(element);
-  }
-  element.__resizeListeners__.push(fn);
+var resize = {
+  __esModule : true,
+  removeEventListener: function removeResizeListener(element, fn) {
+    if (!element || !element.__resizeListeners__) return;
+    element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
+    if (!element.__resizeListeners__.length) {
+      element.__ro__.disconnect();
+    }
+  },
+  addResizeListener: function(element, fn) {
+    if (isServer) return;
+    if (!element.__resizeListeners__) {
+      element.__resizeListeners__ = [];
+      element.__ro__ = new _resizeObserverPolyfill2.default(resizeHandler);
+      element.__ro__.observe(element);
+    }
+    element.__resizeListeners__.push(fn);
+  },
 };
 
-/* istanbul ignore next */
-var removeResizeListener = exports.removeResizeListener = function removeResizeListener(element, fn) {
-  if (!element || !element.__resizeListeners__) return;
-  element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
-  if (!element.__resizeListeners__.length) {
-    element.__ro__.disconnect();
-  }
-};
+
+// exports.removeEventListener = resize.removeEventListener;
+// exports.addResizeListener = resize.addResizeListener
+export function removeResizeListener(element, fn) {
+  return resize.removeEventListener(element, fn)
+}
+export function addResizeListener(element, fn) {
+  return resize.addResizeListener(element, fn)
+}
+

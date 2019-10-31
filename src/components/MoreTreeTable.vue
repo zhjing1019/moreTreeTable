@@ -39,8 +39,16 @@
         :isEdit="isEdit"
       ></row-head>
       <!-- 表体数值部分   右下角 -->
+      <!-- <value-table
+        v-if="colHead.length > 0 && (colHead.length > 0)"
+        :style="rightBottomStyle"
+        :tableData.sync="tableData"
+        @tdChange="tdChange"
+        isEdit="isEdit"
+      >
+      </value-table> -->
       <value-table
-        v-if="colHead.length > 0 && (list1.length > 0 || list2.length > 0)"
+        v-if="colHead.length > 0 && (colHead.length > 0)"
         :style="rightBottomStyle"
         :tableData.sync="tableData"
         @tdChange="tdChange"
@@ -65,7 +73,9 @@ import ScrollBar from "./ScrollBar.vue";
 import RowHead from "./RowHead.vue";
 import ValueTable from "./ValueTable.vue";
 import scrollable from "./scrollable.js";
-
+/**
+ * 展开树形结构数据
+ */
 const getAllColumns = columns => {
   const result = [];
   columns.forEach(column => {
@@ -78,7 +88,10 @@ const getAllColumns = columns => {
   });
   return result;
 };
-
+/**
+ * 获得竖向表头的colspan和rowspan
+ * 并且拿到竖向表头的数组
+ */
 const convertToRows = originColumns => {
   let maxLevel = 1;
   const traverse = (column, parent) => {
@@ -200,14 +213,10 @@ const headersToRows = originColumns => {
 };
 
 export default {
-  name: "EditTable",
   mixins: [scrollable],
   components: { RowHead, ColHead, ValueTable, ScrollBar },
   data() {
     return {
-      list1: [],
-      list2: [],
-      list3: [],
       count: 0,
       data: [],
       //初始化数据
@@ -217,7 +226,6 @@ export default {
       clientWidth: 0,
       clientHeight: 0,
       tdHeight: [],
-
       tableClientX: 0,
       tableClientY: 0,
       hoverDiv: {
@@ -227,7 +235,6 @@ export default {
         rowIndex: -1,
         colIndex: -1
       },
-      isFirst: 0,
       isVal: false,
       isValueData: 0,
       testData: [],
@@ -241,31 +248,18 @@ export default {
     };
   },
   computed: {
-    //表头的初始化数据
+    //横向表头的初始化数据
     headers() {
-      let newArr = [];
-      if (this.list1.length > 0) {
-        this.headGrage(this.list1);
-        newArr = this.list1;
-        if (this.list2.length > 0) {
-          newArr.forEach(x => {
-            this.$set(x, "children", this.resetRightHeader);
-          });
-        }
+      if(this.rowData.length > 0) {
+        let data = JSON.parse(JSON.stringify(this.rowData));
+        this.giveAllId(data);
+        return data;
       } else {
-        if (this.list2.length > 0) {
-          this.headGrage(this.resetRightHeader);
-          newArr = this.resetRightHeader;
-        }
+        return []
       }
-      if (this.list1.length > 0 || this.list2.length > 0) {
-        this.headGrage(newArr);
-        this.headWidthField(newArr);
-      }
-      this.giveAllId(newArr);
-      this.giveFilterId(newArr);
-      return newArr;
+      
     },
+    //获得横向表头的数据
     resetRow() {
       return headersToRows(this.headers);
     },
@@ -278,61 +272,30 @@ export default {
       let data = this.resetRow;
       return data.lastData;
     },
-    //给横向表头增加children
-    resetRightHeader() {
-      let colHead = [];
-      if (this.list2.length > 0) {
-        var cache = [];
-        var str = JSON.stringify(this.list2, function(key, value) {
-          if (typeof value === "object" && value !== null) {
-            if (cache.indexOf(value) !== -1) {
-              // Circular reference found, discard key
-              return;
-            } // Store value in our collection
-            cache.push(value);
-          }
-          return value;
-        });
-        cache = null; // Enable garbage collection
-        colHead = JSON.parse(str);
-
-        for (let i = colHead.length - 1; i > -1; i--) {
-          let newChildren = [];
-          colHead[i].children && colHead[i].children.length > 0
-            ? (newChildren = [...colHead[i].children])
-            : (newChildren = [colHead[i]]);
-
-          // this.colSpanCount(newChildren);
-          if (colHead[i - 1]) {
-            if (colHead[i - 1].children && colHead[i - 1].children.length > 0) {
-              // let newHead = this.headGrage(colHead[i - 1].children);
-              let newHead = this.headWidthField(colHead[i - 1].children);
-              if (newHead) {
-                newHead.forEach(x => {
-                  let strNewChildren = JSON.parse(JSON.stringify(newChildren));
-                  this.$set(x, "children", strNewChildren);
-                  this.$set(x, "isExpand", true);
-                });
-              }
-            } else {
-              let strNewChildren = JSON.parse(JSON.stringify(newChildren));
-              this.$set(colHead[i - 1], "children", strNewChildren);
-            }
-          }
-        }
-      }
-
-      return [colHead[0]];
-    },
+    //获得横向头部分层的数组
     allHeadRow() {
       return this.headGrage(this.headers);
     },
+    //获得横向头部最后一行的数组
     actualFields() {
       return this.headWidthField(this.headers);
     },
+    //纵向表头初始化数据
+    colHead() {
+      if(this.colData.length > 0) {
+        let data = JSON.parse(JSON.stringify(this.colData));
+        this.giveAllId(data);
+        return data;
+      } else {
+        return []
+      }
+      
+    },
+    //纵向表头分层数据
     allColHeadRow() {
       return this.headGrage(this.colHead);
     },
+    //纵向表头最后一行的数据
     colActualFields() {
       return this.headWidthField(this.colHead);
     },
@@ -351,7 +314,7 @@ export default {
     actualHeight() {
       this.heightAdaption();
       let height = 0;
-      if (this.list1.length > 0 || this.list2.length > 0) {
+      if (this.headers.length > 0) {
         height += this.headerHeight;
       }
       if (this.colHead.length > 0) {
@@ -363,14 +326,11 @@ export default {
       return height;
     },
     //reset 纵向表头的数据
+
     colHeaderData() {
-      let colHead = this.resetColHeadRow;
-      let grageHead = this.headGrage([colHead[0]]);
-      this.headWidthField([colHead[0]]);
+      let grageHead = this.headGrage(this.colHead);
       let newArr = grageHead.slice(1);
-      this.giveAllId(newArr[0]);
-      this.giveFilterId(newArr[0]);
-      return newArr[0];
+      return newArr;
     },
     //纵向表头tr 和td的数据
     resetCol() {
@@ -399,8 +359,8 @@ export default {
         row.forEach(y => {
           let key = x.filterId + "__" + y.filterId;
           arr[key] = {
-            hxId: x.filterId,
-            zxId: y.filterId,
+            rowId: x.filterId,
+            colId: y.filterId,
             value: ""
           };
         });
@@ -411,8 +371,8 @@ export default {
           val.sj.forEach(x => {
             let key = x.rowId + "__" + x.colId;
             let obj = {
-              hxId: x.rowId,
-              zxId: x.colId,
+              rowId: x.rowId,
+              colId: x.colId,
               value: x.value
             };
             this.$set(arr, key, obj);
@@ -422,51 +382,7 @@ export default {
 
       return arr;
     },
-    resetColHeadRow() {
-      var cache = [];
-      let colHead = [];
-      if (this.colHead.length > 0) {
-        var str = JSON.stringify(this.colHead, function(key, value) {
-          if (typeof value === "object" && value !== null) {
-            if (cache.indexOf(value) !== -1) {
-              // Circular reference found, discard key
-              return;
-            } // Store value in our collection
-            cache.push(value);
-          }
-          return value;
-        });
-        cache = null; // Enable garbage collection
-        colHead = JSON.parse(str);
-
-        for (let i = colHead.length - 1; i > -1; i--) {
-          let newChildren = [];
-          colHead[i].children && colHead[i].children.length > 0
-            ? (newChildren = [...colHead[i].children])
-            : (newChildren = [colHead[i]]);
-
-          // this.colSpanCount(newChildren);
-          if (colHead[i - 1]) {
-            if (colHead[i - 1].children && colHead[i].children.length > 0) {
-              // let newHead = this.headGrage(colHead[i - 1].children);
-              let newHead = this.headWidthField(colHead[i - 1].children);
-              if (newHead) {
-                newHead.forEach(x => {
-                  let strNewChildren = JSON.parse(JSON.stringify(newChildren));
-                  this.$set(x, "children", strNewChildren);
-                  this.$set(x, "isExpand", true);
-                });
-              }
-            } else {
-              let strNewChildren = JSON.parse(JSON.stringify(newChildren));
-              this.$set(colHead[i - 1], "children", strNewChildren);
-            }
-          }
-        }
-      }
-
-      return [...colHead];
-    },
+    
     //横向表头的高度
     headerHeight() {
       let height = this.allHeadRow.map(() => this.tableTdHeight).reduce((total, current) => total + current);
@@ -547,16 +463,13 @@ export default {
     }
   },
   props: {
-    colHead: Array,
-    rowHead: Array,
+    colData: Array,
+    rowData: Array,
     getData: Object,
     isEdit: {
       type: Boolean,
       default: true
     },
-    listFirst: Array,
-    listSecond: Array,
-    listThree: Array,
     tableTdHeight: {
       type: Number,
       default: 40
@@ -568,67 +481,6 @@ export default {
 
   },
   watch: {
-    // getData(val) {
-    //   debugger;
-    //   if(val && Object.keys(val).length > 0) {
-    //     // let key = x.filterId + "__" + y.filterId;
-    //     //   arr[key] = {
-    //     //     hxId: x.filterId,
-    //     //     zxId: y.filterId,
-    //     //     value: ""
-    //     //   };
-    //     if(val.sj && val.sj.length > 0) {
-    //       val.sj
-
-    //     }
-
-    //   }
-    // },
-    listFirst: {
-      immediate: true,
-      deep: true,
-      handler(val) {
-        let value = [];
-        val && val.length > 0 ? (value = val) : (value = []);
-        this.list1 = JSON.parse(JSON.stringify(value));
-      }
-    },
-    listSecond: {
-      immediate: true,
-      deep: true,
-      handler(val) {
-        let value = [];
-        val && val.length > 0 ? (value = val) : (value = []);
-        this.list2 = JSON.parse(JSON.stringify(value));
-      }
-    },
-    listThree: {
-      immediate: true,
-      deep: true,
-      handler(val) {
-        let value = [];
-        val && val.length > 0 ? (value = val) : (value = []);
-        this.list3 = JSON.parse(JSON.stringify(value));
-      }
-    },
-    data: {
-      immediate: true,
-      // deep: true,
-      handler(val) {
-        this.data = val;
-        this.tdHeight = new Array(val.length);
-        if (val && this.isFirst == 0) {
-          this.initTable = JSON.parse(JSON.stringify(val));
-          this.isFirst++;
-        }
-        this.tdHeight = new Array(this.data.length);
-        this.$nextTick(() => {
-          this.tableClientY = this.$refs.editTableWrapper.offsetTop;
-          this.tableClientX = this.$refs.editTableWrapper.offsetLeft;
-        });
-        this.$emit("change", val);
-      }
-    }
   },
   mounted() {
     let self = this;
@@ -771,7 +623,6 @@ export default {
     giveItemAllId(data) {
       if (data.allId) {
         if (data.children && data.children.length > 0) {
-          // this.giveAllId(data.children);
           data.children.forEach(x => {
             if (!x.allId && x.parentId) {
               if (x.parentId === data.id) {
@@ -830,7 +681,7 @@ export default {
     getParentTag(startTag) {
       var self = this;
       // 传入标签是否是DOM对象
-      if (!(startTag instanceof HTMLElement)) return console.error("receive only HTMLElement");
+      if (!(startTag instanceof HTMLElement)) return;
       // 父级标签是否是body,是着停止返回集合,反之继续
       if ("BODY" !== startTag.parentElement.nodeName) {
         if (startTag.parentElement.nodeName == "TD") {
@@ -1029,6 +880,8 @@ export default {
   }
 }
 .editTableWrapper {
+  width: 100%;
+  height: 100%;
   .el-input--small {
     .el-input__inner {
       border-color: transparent;

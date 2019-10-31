@@ -1,9 +1,9 @@
 <template>
   <!-- <div class="edit-row-head"> -->
   <table class="editTable__block value-table">
-    <tr v-for="(x, xindex) in edit.lastDataCol" :key="x.allId + xindex">
-      <td v-for="(y, yindex) in edit.lastDataRow" :key="y.allId + yindex + xindex" :style="tdStyle">
-        <el-input
+    <tr v-for="(x, xindex) in edit.lastDataCol" :key="xindex">
+      <td v-for="(y, yindex) in edit.lastDataRow" :key="yindex + '_' + xindex" :style="tdStyle">
+        <!-- <el-input
           v-if="edit.isEdit"
           size="mini"
           v-model="valueData[x.filterId + '__' + y.filterId].value"
@@ -11,7 +11,8 @@
           @change="change(valueData[x.filterId + '__' + y.filterId])"
           @keyup.enter.native="change(valueData[x.filterId + '__' + y.filterId])"
         ></el-input>
-        <span v-else>--</span>
+        <span v-else>--</span> -->
+        --
       </td>
     </tr>
   </table>

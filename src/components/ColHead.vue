@@ -26,8 +26,6 @@ export default {
       sync (prop, value) {
         this[prop] = value
       },
-
-
       createHead(h) {
         let [tr] = [[]];
         //左上角部分
