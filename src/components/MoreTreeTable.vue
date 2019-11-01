@@ -6,7 +6,6 @@
       class="fix south__west"
       :onlyFix="true"
       :allRow="true"
-      @popoverChange="popoverChange3"
       :style="southWestStyle"
     ></col-head>
     <!-- 固定列头部表格 西北方向 左上角部分 -->
@@ -15,7 +14,6 @@
       class="fix north__west"
       :onlyFix="true"
       :allRow="false"
-      @popoverChange="popoverChange3"
       :style="northWestStyle"
     ></col-head>
     <!-- 固定表头表格 东北方向 主体表头 右上角-->
@@ -25,7 +23,6 @@
       class="fix north__east"
       :allRow="false"
       :style="northEastStyle"
-      @popoverChange="popoverChange2"
     ></row-head>
     <div :style="allTable">
       <row-head
@@ -34,14 +31,12 @@
         class="fix north__east"
         :allRow="false"
         :style="northEastStyle1"
-        @popoverChange="popoverChange2"
       ></row-head>
       <!-- 表体数值部分   右下角 -->
       <value-table
         v-if="colData.length > 0 || rowData.length > 0"
         :style="rightBottomStyle"
         :tableData.sync="tableData"
-        @tdChange="tdChange"
       >
       </value-table>
     </div>
@@ -252,11 +247,11 @@ export default {
     },
     //获得横向头部分层的数组
     allHeadRow() {
-      return this.headGrage(this.headers);
+      return this.resetNewRowHead ? this.resetNewRowHead : []
     },
     //获得横向头部最后一行的数组
     actualFields() {
-      return this.headWidthField(this.headers);
+      return this.lastDataRow;
     },
     //纵向表头初始化数据
     colHead() {
@@ -270,11 +265,11 @@ export default {
     },
     //纵向表头分层数据
     allColHeadRow() {
-      return this.headGrage(this.colHead);
+      return this.resetNewColHead[0] ? this.resetNewColHead[0] : []
     },
     //纵向表头最后一行的数据
     colActualFields() {
-      return this.headWidthField(this.colHead);
+      return this.lastDataCol
     },
     //横向表格的宽度
     colheadWidth() {
@@ -520,87 +515,6 @@ export default {
     };
   },
   methods: {
-    popoverChange2(val) {
-      this.$emit("popoverChange", val, "list2");
-    },
-    popoverChange3(val) {
-      this.$emit("popoverChange", val, "list3");
-    },
-    tdChange(data) {
-      this.$emit("tdChange", data);
-    },
-
-    // 将头部分级
-    headGrage(data, arr = []) {
-      if(data.length > 0) {
-        if (arr.length < 1) arr = [this.forHead(data)];
-
-        if (this.isChildren(data) > 0) {
-          let two = [];
-          data.forEach(x => {
-            if (x.children && x.children.length > 0) two.push(...this.forHead(x.children, x));
-          });
-          arr = [...arr, two];
-          return this.headGrage(two, arr);
-        } else {
-          return arr;
-        }
-      } else {
-        return arr
-      }
-
-    },
-
-    //占宽度的头部
-    headWidthField(data, arr = []) {
-      if(data.length > 0) {
-        if (this.isChildren(data) > 0) {
-          let two = [];
-          data.forEach(x => {
-            if (x.children && x.children.length > 0) {
-              two.push(...this.forHead(x.children, x));
-            } else {
-              arr.push(x);
-            }
-          });
-          return this.headWidthField(two, arr);
-        } else {
-          let newData = [...arr, ...data];
-          newData.forEach(x => {
-            x.isExpand = true;
-          });
-          return [...arr, ...data];
-        }
-      } else {
-        return arr;
-      }
-      
-    },
-    forHead(data, parent = {}) {
-      let newData = [];
-      if(data.lengtn > 0) {
-        data.forEach(x => {
-          if (x.parentId) {
-            newData.push(x);
-          } else {
-            x.parentId = Object.keys(parent).length > 0 ? parent.id : "";
-            x.parentName = Object.keys(parent).length > 0 ? parent.name : "";
-            newData.push(x);
-          }
-        });
-        return newData;
-      } else {
-        return newData;
-      }
-    },
-    isChildren(data) {
-      let count = 0;
-      data.forEach(x => {
-        if (x.children && x.children.length > 0) count++;
-      });
-      return count;
-    },
-
     heightAdaption() {
       this.$nextTick(() => {
         this.allTableHeight =
