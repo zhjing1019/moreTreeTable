@@ -1,6 +1,13 @@
 <template>
   <div class="more-app">
+    <h3>多表头表格</h3>
     <more-tree-table :colData="colHead" :rowData="rowHead"></more-tree-table>
+    <br>
+    <hr>
+    <br>
+    <h3>竖向表头表格</h3>
+    <more-tree-table :colData="colHead" :tableValue="tableValue2"></more-tree-table>
+
   </div>
 </template>
 
@@ -17,7 +24,11 @@ export default {
     return {
       moreTreeTableJs: moreTreeTableJs,
       colHead: moreTreeTableJs.colHead,
-      rowHead: moreTreeTableJs.rowHead
+      rowHead: moreTreeTableJs.rowHead,
+      tableValue1: moreTreeTableJs.tableValue1,
+      tableValue2: moreTreeTableJs.tableValue2,
+      tableValue3: moreTreeTableJs.tableValue3,
+
     }
   }
 }

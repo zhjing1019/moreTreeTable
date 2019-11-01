@@ -1,21 +1,39 @@
 <template>
-  <!-- <div class="edit-row-head"> -->
-  <table class="editTable__block value-table">
-    <tr v-for="(x, xindex) in edit.lastDataCol" :key="xindex">
-      <td v-for="(y, yindex) in edit.lastDataRow" :key="yindex + '_' + xindex" :style="tdStyle">
-        --
-      </td>
-    </tr>
-  </table>
+  <div class="value-table">
+    <!-- 多表头表体 -->
+    <table class="editTable__block" v-if="edit.rowData.length > 0 && edit.colData.length > 0">
+      <tr v-for="(x, xindex) in edit.lastDataCol" :key="xindex">
+        <td v-for="(y, yindex) in edit.lastDataRow" :key="yindex + '_' + xindex" :style="tdStyle">
+          {{tableData[ y.id+ '__' + x.id] || ""}}
+        </td>
+      </tr>
+    </table> 
+    <!-- 横向表头表体 -->
+    <table class="editTable__block" v-if="edit.rowData.length > 0 && edit.colData.length === 0">
+      <tr v-for="(x, xindex) in tableData" :key="xindex">
+        <td v-for="(y, yindex) in edit.lastDataRow" :key="yindex + '_' + xindex" :style="tdStyle">
+          {{x[y.id] || ""}}
+        </td>
+      </tr>
+    </table> 
+    <!-- 纵向表头表体 -->
+    <table class="editTable__block" v-if="edit.rowData.length === 0 && edit.colData.length > 0">
+      <tr v-for="(x, xindex) in edit.lastDataCol" :key="xindex">
+        <td v-for="(y, yindex) in tableData" :key="yindex + '_' + xindex" :style="tdStyle">
+          {{y[x.id] || ""}}
+        </td>
+      </tr>
+    </table> 
+  </div>
+  
 
-  <!-- </div> -->
 </template>
 
 <script>
 export default {
   inject: ["edit"],
   props: {
-    tableData: Object
+    tableData: [Object, Array]
   },
   watch: {
     tableData: {

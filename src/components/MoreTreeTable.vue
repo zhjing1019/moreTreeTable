@@ -2,7 +2,7 @@
   <div class="editTableWrapper" ref="editTableWrapper" @wheel="wheel">
     <!-- 固定列头表格 西南方向 左下角部分-->
     <col-head
-      v-if="colHead.length > 0"
+      v-if="colData.length > 0"
       class="fix south__west"
       :onlyFix="true"
       :allRow="true"
@@ -11,7 +11,7 @@
     ></col-head>
     <!-- 固定列头部表格 西北方向 左上角部分 -->
     <col-head
-      v-if="colHead.length > 0"
+      v-if="colData.length > 0 && rowData.length > 0"
       class="fix north__west"
       :onlyFix="true"
       :allRow="false"
@@ -20,39 +20,28 @@
     ></col-head>
     <!-- 固定表头表格 东北方向 主体表头 右上角-->
     <row-head
-      v-if="headers.length > 0"
+      v-if="rowData.length > 0"
       :headers="headers"
       class="fix north__east"
       :allRow="false"
       :style="northEastStyle"
       @popoverChange="popoverChange2"
-      :isEdit="isEdit"
     ></row-head>
     <div :style="allTable">
       <row-head
-        v-if="headers.length > 0"
+        v-if="rowData.length > 0"
         :headers="headers"
         class="fix north__east"
         :allRow="false"
         :style="northEastStyle1"
         @popoverChange="popoverChange2"
-        :isEdit="isEdit"
       ></row-head>
       <!-- 表体数值部分   右下角 -->
-      <!-- <value-table
-        v-if="colHead.length > 0 && (colHead.length > 0)"
-        :style="rightBottomStyle"
-        :tableData.sync="tableData"
-        @tdChange="tdChange"
-        isEdit="isEdit"
-      >
-      </value-table> -->
       <value-table
-        v-if="colHead.length > 0 && (colHead.length > 0)"
+        v-if="colData.length > 0 || rowData.length > 0"
         :style="rightBottomStyle"
         :tableData.sync="tableData"
         @tdChange="tdChange"
-        isEdit="isEdit"
       >
       </value-table>
     </div>
@@ -228,18 +217,8 @@ export default {
       tdHeight: [],
       tableClientX: 0,
       tableClientY: 0,
-      hoverDiv: {
-        top: 0,
-        left: 0,
-        width: 0,
-        rowIndex: -1,
-        colIndex: -1
-      },
-      isVal: false,
-      isValueData: 0,
-      testData: [],
-      expandAllColHead: [],
-      actualAll: 0
+      actualAll: 0,
+      
     };
   },
   provide() {
@@ -252,7 +231,6 @@ export default {
     headers() {
       if(this.rowData.length > 0) {
         let data = JSON.parse(JSON.stringify(this.rowData));
-        this.giveAllId(data);
         return data;
       } else {
         return []
@@ -284,7 +262,6 @@ export default {
     colHead() {
       if(this.colData.length > 0) {
         let data = JSON.parse(JSON.stringify(this.colData));
-        this.giveAllId(data);
         return data;
       } else {
         return []
@@ -338,42 +315,67 @@ export default {
       return colRowData.lastData;
     },
 
+    /**
+     * 表格的数据分为三种形式
+     * 当是横向表头表格时，表格的数据为Array
+     * 当是纵向表头表格时，表格的数据为Array
+     * 当是多项表头表格时，表格的数据为Object
+     */
     tableData() {
-      let arr = {};
-      let row = [];
-      let col = [];
-      if (this.headers.length > 0) {
-        row = this.lastDataRow;
-      }
-      if (this.colHead.length > 0) {
-        col = this.lastDataCol;
-      }
-      col.forEach(x => {
-        row.forEach(y => {
-          let key = x.filterId + "__" + y.filterId;
-          arr[key] = {
-            rowId: x.filterId,
-            colId: y.filterId,
-            value: ""
-          };
-        });
-      });
-      let val = this.getData;
-      if (val && Object.keys(val).length > 0) {
-        if (val.sj && val.sj.length > 0) {
-          val.sj.forEach(x => {
-            let key = x.rowId + "__" + x.colId;
-            let obj = {
-              rowId: x.rowId,
-              colId: x.colId,
-              value: x.value
-            };
-            this.$set(arr, key, obj);
+      let arr;
+      if(this.headers.length > 0 && this.colHead.length === 0) {
+        //横向表头表格
+        arr = [...this.tableValue]
+      } else if(this.headers.length === 0 && this.colHead.length > 0) {
+        //纵向表头表格
+        arr = [...this.tableValue]
+      } else {
+        //多表头表格
+        arr = {};
+        let [row, col] = [this.lastDataRow, this.lastDataCol];
+        col.forEach(x => {
+          row.forEach(y => {
+            let key = x.id + "__" + y.id;
+            arr[key] = "";
           });
-        }
+        });
+        Object.assign(this.tableValue, arr);
       }
 
       return arr;
+      
+      // let row = [];
+      // let col = [];
+      // if (this.headers.length > 0) {
+      //   row = this.lastDataRow;
+      // }
+      // if (this.colHead.length > 0) {
+      //   col = this.lastDataCol;
+      // }
+      // col.forEach(x => {
+      //   row.forEach(y => {
+      //     let key = x.filterId + "__" + y.filterId;
+      //     arr[key] = {
+      //       rowId: x.filterId,
+      //       colId: y.filterId,
+      //       value: ""
+      //     };
+      //   });
+      // });
+      // let val = this.getData;
+      // if (val && Object.keys(val).length > 0) {
+      //   if (val.sj && val.sj.length > 0) {
+      //     val.sj.forEach(x => {
+      //       let key = x.rowId + "__" + x.colId;
+      //       let obj = {
+      //         rowId: x.rowId,
+      //         colId: x.colId,
+      //         value: x.value
+      //       };
+      //       this.$set(arr, key, obj);
+      //     });
+      //   }
+      // }
     },
     
     //横向表头的高度
@@ -438,7 +440,7 @@ export default {
         width: this.actualWidth1 + "px",
         minWidth: `calc(100% - ${this.colheadWidth}px)`,
         zIndex: 0,
-        top: -this.scrollY - 1 + "px"
+        top: -this.scrollY  + "px"
       };
     },
     northEastStyle1() {
@@ -456,12 +458,34 @@ export default {
     }
   },
   props: {
-    colData: Array,
-    rowData: Array,
     getData: Object,
-    isEdit: {
-      type: Boolean,
-      default: true
+    colData: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
+    rowData: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
+    //表格里面的展示数据
+    tableValue: {
+      type: [Object, Array],
+      default() {
+        if(this.rowData.length > 0 && this.colData.length === 0) {
+          //横向表头的表格
+          return []
+        } else if(this.colData.length > 0 && this.rowData.length === 0) {
+          //纵向表头的表格
+          return []
+        } else {
+          //多表头的数据
+          return {}
+        }
+      }
     },
     tableTdHeight: {
       type: Number,
@@ -508,52 +532,66 @@ export default {
 
     // 将头部分级
     headGrage(data, arr = []) {
-      if (arr.length < 1) arr = [this.forHead(data)];
+      if(data.length > 0) {
+        if (arr.length < 1) arr = [this.forHead(data)];
 
-      if (this.isChildren(data) > 0) {
-        let two = [];
-        data.forEach(x => {
-          if (x.children && x.children.length > 0) two.push(...this.forHead(x.children, x));
-        });
-        arr = [...arr, two];
-        return this.headGrage(two, arr);
+        if (this.isChildren(data) > 0) {
+          let two = [];
+          data.forEach(x => {
+            if (x.children && x.children.length > 0) two.push(...this.forHead(x.children, x));
+          });
+          arr = [...arr, two];
+          return this.headGrage(two, arr);
+        } else {
+          return arr;
+        }
       } else {
-        return arr;
+        return arr
       }
+
     },
 
     //占宽度的头部
     headWidthField(data, arr = []) {
-      if (this.isChildren(data) > 0) {
-        let two = [];
-        data.forEach(x => {
-          if (x.children && x.children.length > 0) {
-            two.push(...this.forHead(x.children, x));
-          } else {
-            arr.push(x);
-          }
-        });
-        return this.headWidthField(two, arr);
+      if(data.length > 0) {
+        if (this.isChildren(data) > 0) {
+          let two = [];
+          data.forEach(x => {
+            if (x.children && x.children.length > 0) {
+              two.push(...this.forHead(x.children, x));
+            } else {
+              arr.push(x);
+            }
+          });
+          return this.headWidthField(two, arr);
+        } else {
+          let newData = [...arr, ...data];
+          newData.forEach(x => {
+            x.isExpand = true;
+          });
+          return [...arr, ...data];
+        }
       } else {
-        let newData = [...arr, ...data];
-        newData.forEach(x => {
-          x.isExpand = true;
-        });
-        return [...arr, ...data];
+        return arr;
       }
+      
     },
     forHead(data, parent = {}) {
       let newData = [];
-      data.forEach(x => {
-        if (x.parentId) {
-          newData.push(x);
-        } else {
-          x.parentId = Object.keys(parent).length > 0 ? parent.id : "";
-          x.parentName = Object.keys(parent).length > 0 ? parent.name : "";
-          newData.push(x);
-        }
-      });
-      return newData;
+      if(data.lengtn > 0) {
+        data.forEach(x => {
+          if (x.parentId) {
+            newData.push(x);
+          } else {
+            x.parentId = Object.keys(parent).length > 0 ? parent.id : "";
+            x.parentName = Object.keys(parent).length > 0 ? parent.name : "";
+            newData.push(x);
+          }
+        });
+        return newData;
+      } else {
+        return newData;
+      }
     },
     isChildren(data) {
       let count = 0;
@@ -561,101 +599,6 @@ export default {
         if (x.children && x.children.length > 0) count++;
       });
       return count;
-    },
-    giveAllId(data) {
-      data.forEach(x => {
-        this.giveItemAllId(x);
-      });
-
-      return data;
-    },
-    giveFilterId(data) {
-      data.forEach(x => {
-        this.giveItemFilterId(x);
-      });
-      return data;
-    },
-    giveItemFilterId(data) {
-      if (data.filterId) {
-        if (data.children && data.children.length > 0) {
-          // this.giveAllId(data.children);
-          data.children.forEach(x => {
-            if (!x.filterId) {
-              //如果没有filterId
-              let filterId = data.filterId;
-              let childrenFilterId = x.isExpand ? x.id : "";
-              let split = "";
-              filterId && childrenFilterId ? (split = "_") : (split = "");
-              x.filterId = filterId + split + childrenFilterId;
-            }
-          });
-          return this.giveFilterId(data.children);
-        } else {
-          return;
-        }
-      } else {
-        let filterId = data.isExpand ? data.id : "";
-        data.filterId = filterId;
-        if (data.children && data.children.length > 0) {
-          // this.giveAllId(data.children);
-          data.children.forEach(x => {
-            if (!x.filterId) {
-              //如果没有filterId
-              let childrenFilterId = x.isExpand ? x.id : "";
-              let split = "";
-              filterId && childrenFilterId ? (split = "_") : (split = "");
-              x.filterId = filterId + split + childrenFilterId;
-            }
-          });
-          return this.giveFilterId(data.children);
-        } else {
-          return;
-        }
-      }
-    },
-    giveItemAllId(data) {
-      if (data.allId) {
-        if (data.children && data.children.length > 0) {
-          data.children.forEach(x => {
-            if (!x.allId && x.parentId) {
-              if (x.parentId === data.id) {
-                x.allId = data.allId + "_" + x.id;
-                x.allName = data.allName + "_" + x.name;
-              } else {
-                x.allId = data.allId + "_" + x.parentId + "_" + x.id;
-                x.allName = data.allName + "_" + x.parentName + "_" + x.name;
-              }
-            }
-          });
-          return this.giveAllId(data.children);
-        } else {
-          return;
-        }
-      } else {
-        let pid = data.parentId ? data.parentId + "_" : "";
-        let pName = data.parentName ? data.parentName + "_" : "";
-        let allId = pid + data.id;
-        let allName = pName + data.name;
-        data.allId = allId;
-        data.allName = allName;
-        if (data.children && data.children.length > 0) {
-          // this.giveAllId(data.children);
-          data.children.forEach(x => {
-            if (!x.allId && x.parentId) {
-              if (x.parentId === data.id) {
-                x.allId = allId + "_" + x.id;
-                x.allName = allName + "_" + x.name;
-              } else {
-                x.allId = allId + "_" + x.parentId + "_" + x.id;
-                x.allName = allName + "_" + x.parentName + "_" + x.name;
-              }
-            }
-          });
-          return this.giveAllId(data.children);
-        } else {
-          return;
-        }
-      }
     },
 
     heightAdaption() {
