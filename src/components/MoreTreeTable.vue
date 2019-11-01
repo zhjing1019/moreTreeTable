@@ -438,7 +438,7 @@ export default {
         width: this.actualWidth1 + "px",
         minWidth: `calc(100% - ${this.colheadWidth}px)`,
         zIndex: 0,
-        top: -this.scrollY + "px"
+        top: -this.scrollY - 1 + "px"
       };
     },
     northEastStyle1() {
@@ -870,7 +870,6 @@ export default {
     // text-overflow: ellipsis;
     font-size: 11px;
     color: #6a6a6a;
-    border-top: 0;
   }
 }
 .editTableWrapper {
