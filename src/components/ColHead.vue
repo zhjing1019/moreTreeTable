@@ -29,30 +29,20 @@ export default {
       createHead(h) {
         let [tr] = [[]];
         //左上角部分
-        this.headTotal = this.edit.allHeadRow.length;
-        // this.edit.allColHeadRow.forEach( (x, index) => {
-        //     if(index == 0) {
-        //         for(let i = 0; i < this.edit.allHeadRow.length; i++) {
-        //             let cell = [];
-        //             if(i === 0) {
-        //                 x.forEach((y) => {
-        //                     cell.push(this.creatFirstHeadTr(h, y, i));
-        //                 })
-        //             }
-        //             tr.push(<tr>{cell}</tr>)
-        //         }
-        //     }
-        // })
-        let rowSpan = this.edit.allHeadRow.length;
-        let colSpan = this.edit.allColHeadRow.length;
-        this.edit.allColHeadRow.forEach( (x, index) => {
-            if(index == 0) {
-                for(let i = 0; i < this.edit.allHeadRow.length; i++) {
-                    let cell = (<th colspan={colSpan} rowSpan={rowSpan}></th>)
-                    tr.push(<tr>{cell}</tr>)
-                }
+        let rowspan = this.edit.allHeadRow.length;
+        let colspan = this.edit.allColHeadRow.length;
+        for(let i = 0; i < rowspan; i++) {
+            if(i === 0) {
+                let width = colspan * this.edit.headColWidth;
+                let height = rowspan * this.edit.tableTdHeight;
+                let cell = (<th colspan={colspan} rowspan={rowspan} style={{width: width + 'px', height: height + 'px'}}> </th>)
+                tr.push(<tr>{cell}</tr>)
+            } else {
+                tr.push(<tr></tr>)
             }
-        })
+        }
+
+        this.creatFirstHeadTr(h)
         // //左下角部分；
         if(this.allRow) {
             this.edit.resetNewColHead.forEach((x) => {
@@ -72,22 +62,7 @@ export default {
       },
 
 
-      creatFirstHeadTr(h, y, i) {
-            if(i == 0) {
-
-                let [data, colspan, rowspan, colspanCount, width] = [this.edit.headGrage([y]), 1, 1, 1, 0];
-                colspanCount = this.edit.allHeadRow && this.edit.allHeadRow.length ? this.edit.allHeadRow.length : 1;
-                colspan = data.length > 1 ? data.length : 1;
-                rowspan = colspanCount;
-                data.forEach((x, index) => {
-                    if(index !== 0 && x[0]) {
-                        width += this.edit.headColWidth
-                    }
-                })
-                let height = this.edit.tableTdHeight * this.edit.allHeadRow.length;
-                return (<th colspan={colspan - 1} rowspan={rowspan} style={{ width: width + "px", height: height + "px", textAlign: this.edit.textAlign,  borderRight: this.edit.moreHead ? "" : "1px solid #d9d9d9", paddingLeft: 0 }}>{y.name}</th>)
-            }
-        },
+      creatFirstHeadTr() {},
     }
 }
 </script>
