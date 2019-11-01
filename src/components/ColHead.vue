@@ -26,7 +26,7 @@ export default {
       sync (prop, value) {
         this[prop] = value
       },
-      createHead(h) {
+      createHead() {
         let [tr] = [[]];
         //左上角部分
         let rowspan = this.edit.allHeadRow.length;
@@ -41,8 +41,6 @@ export default {
                 tr.push(<tr></tr>)
             }
         }
-
-        this.creatFirstHeadTr(h)
         // //左下角部分；
         if(this.allRow) {
             this.edit.resetNewColHead.forEach((x) => {
@@ -62,7 +60,6 @@ export default {
       },
 
 
-      creatFirstHeadTr() {},
     }
 }
 </script>

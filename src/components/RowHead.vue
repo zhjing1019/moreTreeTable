@@ -21,14 +21,14 @@ export default {
         }
     },
     methods: {
-      createHead(h) {
+      createHead() {
         let [tr] = [[]];
 
         this.edit.resetNewRowHead.forEach((x) => {
             let cell = [];
             x.forEach((y) => {
                 if(y && y !== null) {
-                    let height = y.rowSpan * (this.edit.tableTdHeight - 1);
+                    let height = y.rowSpan * (this.edit.tableTdHeight);
                     // let thPopover = this.popoverCell(h, y, height);
                     cell.push(<th colspan={y.colSpan} rowspan={y.rowSpan} style={{ width: this.edit.headColWidth + "px", height: height + "px", textAlign: this.edit.textAlign}}>{y.name}</th>)
                 }
@@ -37,6 +37,7 @@ export default {
         });
         return tr;
       },
+
     }
 }
 </script>

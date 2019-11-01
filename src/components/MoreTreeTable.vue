@@ -10,14 +10,14 @@
       :style="southWestStyle"
     ></col-head>
     <!-- 固定列头部表格 西北方向 左上角部分 -->
-    <!-- <col-head
+    <col-head
       v-if="colHead.length > 0"
       class="fix north__west"
       :onlyFix="true"
       :allRow="false"
       @popoverChange="popoverChange3"
       :style="northWestStyle"
-    ></col-head> -->
+    ></col-head>
     <!-- 固定表头表格 东北方向 主体表头 右上角-->
     <row-head
       v-if="headers.length > 0"
@@ -870,6 +870,7 @@ export default {
     // text-overflow: ellipsis;
     font-size: 11px;
     color: #6a6a6a;
+    border-top: 0;
   }
 }
 .editTableWrapper {
