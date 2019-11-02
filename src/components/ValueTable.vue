@@ -74,6 +74,8 @@ export default {
 .value-table {
   table {
     table-layout: fixed;
+    min-width: 100%;
+
   }
   .el-table td {
     padding: 0 !important;
