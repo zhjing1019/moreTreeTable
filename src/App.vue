@@ -1,12 +1,17 @@
 <template>
   <div class="more-app">
     <!-- <h3>多表头表格</h3> -->
-    <more-tree-table :colData="colHead" :rowData="rowHead"></more-tree-table>
+    <!-- <more-tree-table :colData="colHead" :rowData="rowHead" :tableValue="tableValue1"></more-tree-table> -->
     <!-- <br>
     <hr>
     <br>
     <h3>竖向表头表格</h3>
     <more-tree-table :colData="colHead" :tableValue="tableValue2"></more-tree-table> -->
+    <!-- <br>
+    <hr>
+    <br>
+    <h3>横向表头表格</h3> -->
+    <more-tree-table :rowData="rowHead" :tableValue="tableValue2"></more-tree-table>
 
   </div>
 </template>
@@ -36,8 +41,9 @@ export default {
 
 <style>
 .more-app{
-  width: 100vw;
+  width: calc(100vw - 40px);
   height: 100vh;
+  
 
 }
 </style>

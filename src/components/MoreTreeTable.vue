@@ -24,7 +24,7 @@
       :allRow="false"
       :style="northEastStyle"
     ></row-head>
-    <div :style="allTable">
+    <div :style="allTable" class="value-data-div">
       <row-head
         v-if="rowData.length > 0"
         :headers="headers"
@@ -334,43 +334,12 @@ export default {
             arr[key] = "";
           });
         });
-        Object.assign(this.tableValue, arr);
+        Object.assign(arr, this.tableValue);
       }
 
       return arr;
       
-      // let row = [];
-      // let col = [];
-      // if (this.headers.length > 0) {
-      //   row = this.lastDataRow;
-      // }
-      // if (this.colHead.length > 0) {
-      //   col = this.lastDataCol;
-      // }
-      // col.forEach(x => {
-      //   row.forEach(y => {
-      //     let key = x.filterId + "__" + y.filterId;
-      //     arr[key] = {
-      //       rowId: x.filterId,
-      //       colId: y.filterId,
-      //       value: ""
-      //     };
-      //   });
-      // });
-      // let val = this.getData;
-      // if (val && Object.keys(val).length > 0) {
-      //   if (val.sj && val.sj.length > 0) {
-      //     val.sj.forEach(x => {
-      //       let key = x.rowId + "__" + x.colId;
-      //       let obj = {
-      //         rowId: x.rowId,
-      //         colId: x.colId,
-      //         value: x.value
-      //       };
-      //       this.$set(arr, key, obj);
-      //     });
-      //   }
-      // }
+      
     },
     
     //横向表头的高度
@@ -441,14 +410,17 @@ export default {
     northEastStyle1() {
       return {
         width: "100%",
+        minWidth: "100%",
         position: "relative"
       };
     },
     //右下角
     rightBottomStyle() {
       return {
+        minWidth: "100%",
         width: "100%",
-        position: "relative"
+        position: "relative",
+        
       };
     }
   },
