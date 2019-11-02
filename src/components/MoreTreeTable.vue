@@ -28,7 +28,7 @@
       <row-head
         v-if="rowData.length > 0"
         :headers="headers"
-        class="fix north__east"
+        class="fix north__east-bottom"
         :allRow="false"
         :style="northEastStyle1"
       ></row-head>
@@ -704,6 +704,7 @@ export default {
 .editTableWrapper {
   width: 100%;
   height: 100%;
+  border: 1px solid #dcdfe6;
   .el-input--small {
     .el-input__inner {
       border-color: transparent;
@@ -712,6 +713,15 @@ export default {
       color: #606266;
       outline: 0;
     }
+  }
+}
+.north__east-bottom{
+  table{
+        border-bottom: 0;
+
+  }
+  th {
+    border-bottom: 0;
   }
 }
 

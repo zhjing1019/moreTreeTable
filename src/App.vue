@@ -41,8 +41,8 @@ export default {
 
 <style>
 .more-app{
-  width: calc(100vw - 60px);
-  height: 100vh;
+  width: calc(100vw - 140px);
+  height: 400px;
   
 
 }
