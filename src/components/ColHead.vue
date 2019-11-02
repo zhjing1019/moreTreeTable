@@ -29,18 +29,21 @@ export default {
       createHead() {
         let [tr] = [[]];
         //左上角部分
-        let rowspan = this.edit.allHeadRow.length;
-        let colspan = this.edit.allColHeadRow.length;
-        for(let i = 0; i < rowspan; i++) {
-            if(i === 0) {
-                let width = colspan * this.edit.headColWidth;
-                let height = rowspan * this.edit.tableTdHeight;
-                let cell = (<th colspan={colspan} rowspan={rowspan} style={{width: width + 'px', height: height + 'px'}}> </th>)
-                tr.push(<tr>{cell}</tr>)
-            } else {
-                tr.push(<tr></tr>)
+        if(this.edit.rowData && this.edit.rowData.length > 0) {
+            let rowspan = this.edit.allHeadRow.length;
+            let colspan = this.edit.allColHeadRow.length;
+            for(let i = 0; i < rowspan; i++) {
+                if(i === 0) {
+                    let width = colspan * this.edit.headColWidth;
+                    let height = rowspan * this.edit.tableTdHeight;
+                    let cell = (<th colspan={colspan} rowspan={rowspan} style={{width: width + 'px', height: height + 'px'}}> </th>)
+                    tr.push(<tr>{cell}</tr>)
+                } else {
+                    tr.push(<tr></tr>)
+                }
             }
         }
+        
         // //左下角部分；
         if(this.allRow) {
             this.edit.resetNewColHead.forEach((x) => {
