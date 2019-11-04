@@ -25,9 +25,13 @@ npm install more-tree-table
     <more-tree-table :colData="colHead" :rowData="rowHead" :tableValue="tableValue1"></more-tree-table>
 ``` 
 **colData: 为Array，是指竖向表头的数据，可以是树形结构的表头** 
+
 **rowData: 为Array，是指横向表头的数据** 
+
 **tableValue: 为Object，是指表格的数据，tableValue中的key为 ’横向表头的id__纵向表头的id** 
+
 colData的值和rowData的值 
+
 ```javascript
 rowData: [
         {
@@ -304,7 +308,8 @@ tableValue的值
     <more-tree-table :rowData="rowHead" :tableValue="tableValue2"></more-tree-table>
 
 ``` 
-**rowData: 为Array，是指横向向表头的数据，可以是树形结构的表头** 
+**rowData: 为Array，是指横向向表头的数据，可以是树形结构的表头**  
+
 **tableValue: 为Array，数组的每一项为对象，对象中的key和横向的id对应** 
 
 rowData的值同上 
