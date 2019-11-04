@@ -276,9 +276,12 @@ tableValue的值
     <more-tree-table :colData="colHead" :tableValue="tableValue2"></more-tree-table>
 
 ``` 
-**colData: 为Array，是指竖向表头的数据，可以是树形结构的表头** 
-**tableValue: 为Array，数组的每一项为对象，对象中的key和纵向的id对应** 
-colData的值同上
+**colData: 为Array，是指竖向表头的数据，可以是树形结构的表头**  
+
+**tableValue: 为Array，数组的每一项为对象，对象中的key和纵向的id对应**  
+
+colData的值同上 
+
 
 tableValue的值 
 ```javascript
@@ -304,7 +307,8 @@ tableValue的值
 **rowData: 为Array，是指横向向表头的数据，可以是树形结构的表头** 
 **tableValue: 为Array，数组的每一项为对象，对象中的key和横向的id对应** 
 
-rowData的值同上
+rowData的值同上 
+
 
 tableValue的值 
 ```javascript
