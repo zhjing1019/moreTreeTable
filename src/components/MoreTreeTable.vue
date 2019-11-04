@@ -548,7 +548,7 @@ export default {
     table-layout: fixed;
   }
   th {
-    background: #f0f2f5;
+    background: #fff;
     font-size: 14px;
     color: #606266;
   }
@@ -615,13 +615,13 @@ export default {
   position: absolute;
   left: 0px;
   top: 0px;
-  background: #f0f2f5;
+  background: transparent;
   font-size: 14px;
   color: #606266;
   z-index: 113;
   th {
     // background: #f0f2f5;
-    background: #eaf8f0;
+    background: #fff;
     font-size: 14px;
     color: #606266;
     z-index: 112;
@@ -635,7 +635,7 @@ export default {
   top: 0;
   th {
     // background: #f0f2f5;
-    background: #eaf8f0;
+    background: #fff;
     font-size: 14px;
     color: #606266;
     z-index: 112;
@@ -643,7 +643,7 @@ export default {
   td {
     font-size: 12px;
     // color: #606266;
-    background: #eaf8f0;
+    background: #fff;
     // white-space: nowrap;
     // overflow: hidden;
     // text-overflow: ellipsis;
@@ -664,13 +664,13 @@ export default {
   font-size: 14px;
   color: #606266;
   th {
-    background: #f7f3fe;
+    background: #fff;
   }
 }
 .activity__table {
   min-width: 100%;
   th {
-    background: #f0f2f5;
+    background: #fff;
     font-size: 14px;
     color: #606266;
   }
