@@ -391,7 +391,7 @@ export default {
       return {
         position: "absolute",
         left: -this.scrollX + this.colheadWidth + "px",
-        width: this.actualWidth1 + "px",
+        width: this.colHead.length > 0 ? this.actualWidth1 - 2 + "px" : "",
         minWidth: `calc(100% - ${this.colheadWidth}px)`,
         zIndex: 10,
         top: 0
