@@ -49,8 +49,6 @@ var resize = {
 };
 
 
-// exports.removeEventListener = resize.removeEventListener;
-// exports.addResizeListener = resize.addResizeListener
 export function removeResizeListener(element, fn) {
   return resize.removeEventListener(element, fn)
 }
