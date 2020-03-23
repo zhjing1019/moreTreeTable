@@ -197,6 +197,7 @@ const headersToRows = originColumns => {
 };
 
 export default {
+  name: 'MoreTreeTable',
   mixins: [scrollable],
   components: { RowHead, ColHead, ValueTable, ScrollBar },
   data() {
