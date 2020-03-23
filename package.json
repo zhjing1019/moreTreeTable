@@ -1,6 +1,6 @@
 {
   "name": "more-tree-table",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
