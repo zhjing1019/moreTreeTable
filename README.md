@@ -19,6 +19,15 @@ npm run serve
 ```javascript
 npm install more-tree-table
 ```
+
+### 组件的使用
+在main.js里引用该组件
+```javascript
+import moreTreeTable from "more-tree-table"
+ 
+Vue.use(moreTreeTable);
+``` 
+
 # 使用该组件 
 ### 多表头表格 
 ```html
