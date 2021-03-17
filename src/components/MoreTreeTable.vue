@@ -40,7 +40,6 @@
       >
       </value-table>
     </div>
-
     <scroll-bar
       v-if="vBarSize > 0 && vBarSize < 100"
       :vertical="true"
@@ -214,7 +213,7 @@ export default {
       tableClientX: 0,
       tableClientY: 0,
       actualAll: 0,
-      
+
     };
   },
   provide() {
@@ -231,7 +230,7 @@ export default {
       } else {
         return []
       }
-      
+
     },
     //获得横向表头的数据
     resetRow() {
@@ -262,7 +261,7 @@ export default {
       } else {
         return []
       }
-      
+
     },
     //纵向表头分层数据
     allColHeadRow() {
@@ -339,10 +338,10 @@ export default {
       }
 
       return arr;
-      
-      
+
+
     },
-    
+
     //横向表头的高度
     headerHeight() {
       let height = this.allHeadRow.map(() => this.tableTdHeight).reduce((total, current) => total + current);
@@ -421,7 +420,7 @@ export default {
         minWidth: "100%",
         width: "100%",
         position: "relative",
-        
+
       };
     }
   },

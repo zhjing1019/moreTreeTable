@@ -6,7 +6,6 @@ export default {
         }
     },
     watch: {
-
     },
     components: {},
     inject: ["edit"],
@@ -23,7 +22,6 @@ export default {
     methods: {
       createHead() {
         let [tr] = [[]];
-
         this.edit.resetNewRowHead.forEach((x) => {
             let cell = [];
             x.forEach((y) => {
@@ -35,8 +33,7 @@ export default {
             tr.push(<tr>{cell}</tr>);
         });
         return tr;
-      },
-
+      }
     }
 }
 </script>

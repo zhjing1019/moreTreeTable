@@ -3,14 +3,11 @@
 export default {
     data() {
         return {
-
         }
     },
     watch: {
-
     },
     components: {},
-
     inject: ["edit"],
     render(h) {
         let tr = this.createHead(h);
@@ -43,7 +40,7 @@ export default {
                 }
             }
         }
-        
+
         // //左下角部分；
         if(this.allRow) {
             this.edit.resetNewColHead.forEach((x) => {
@@ -57,12 +54,8 @@ export default {
                 tr.push(<tr>{cell}</tr>);
             });
         }
-
-
         return tr;
-      },
-
-
+      }
     }
 }
 </script>

@@ -6,7 +6,6 @@
 <script>
 export default {
   name: "ScrollBar",
-
   props: {
     vertical: Boolean,
     size: Number,
@@ -48,7 +47,6 @@ export default {
         this.scrollTo(((offset - thumbHalf) * 100) / this.$el.offsetWidth);
       }
     },
-
     clickThumb(e) {
       e.stopImmediatePropagation();
       this.cursorDown = true;
@@ -59,7 +57,6 @@ export default {
         ? e.target.offsetHeight - (e.clientY - e.target.getBoundingClientRect().top)
         : e.target.offsetWidth - (e.clientX - e.target.getBoundingClientRect().left);
     },
-
     mouseMoveHandler(e) {
       if (this.cursorDown === false) return;
       if (!this.Origin) return;
@@ -73,21 +70,18 @@ export default {
         this.scrollTo(((offset - thumbClickPosition) * 100) / this.$el.offsetWidth);
       }
     },
-
     mouseUpHandler() {
       this.cursorDown = false;
       this.X = this.Y = 0;
       document.removeEventListener("mousemove", this.mouseMoveHandler);
       document.onselectstart = null;
     },
-
     scrollTo(percent) {
       if (percent < 0) percent = 0;
       if (percent + this.size > 100) percent = 100 - this.size;
       this.$emit("scroll", percent);
     }
   },
-
   destroyed() {
     document.removeEventListener("mouseup", this.mouseUpHandler);
   }
@@ -102,7 +96,6 @@ export default {
   z-index: 114;
   border-radius: 4px;
   opacity: 1;
-
   &:hover {
     opacity: 1;
   }
@@ -116,7 +109,6 @@ export default {
       width: 100%;
     }
   }
-
   &.horizontal {
     height: 6px;
     left: 2px;

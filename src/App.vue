@@ -32,8 +32,7 @@ export default {
       rowHead: moreTreeTableJs.rowHead,
       tableValue1: moreTreeTableJs.tableValue1,
       tableValue2: moreTreeTableJs.tableValue2,
-      tableValue3: moreTreeTableJs.tableValue3,
-
+      tableValue3: moreTreeTableJs.tableValue3
     }
   }
 }
@@ -43,7 +42,5 @@ export default {
 .more-app{
   width: calc(100vw - 140px);
   height: 400px;
-  
-
 }
 </style>
