@@ -17,14 +17,10 @@
 </template>
 
 <script>
-// import MoreTreeTable from "./components/MoreTreeTable"
 import moreTreeTableJs from "./moreTreeTableJs"
 
 export default {
   name: 'app',
-  // components: {
-  //   MoreTreeTable
-  // },
   data() {
     return {
       moreTreeTableJs: moreTreeTableJs,
